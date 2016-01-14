@@ -1,0 +1,34 @@
+start =
+    _ first:expr _ rest:expr* _
+      { return [ first ].concat(rest) }
+
+validchar = [0-9a-zA-Z_?!+\-=@#$%^&*/.]
+EOL = [\n\r]
+ws = [ \t]
+_ = (EOL / ws / comment)*
+__ = (EOL / ws / comment)+
+
+atom =
+    chars:validchar+
+        { return chars.join(""); }
+
+quote =
+  _ "'" e:expr _
+      { return [ "quote", e ]; }
+
+_expr =
+  __ a:expr
+      { return a; }
+
+expr_list =
+  "(" a:expr rest:_expr* ")"
+      { return [a].concat(rest); }
+
+comment =
+  ";"+ c:(!EOL .)*
+
+expr =
+    quote
+  / atom
+  / expr_list
+  / comment

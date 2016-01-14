@@ -1,0 +1,23 @@
+{
+  "name": "parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "pegjs": "^0.9.0"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+      "test": "mocha test --ui tdd -c",
+      "watch:test": "mocha test --watch --ui tdd -c --reporter min"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
