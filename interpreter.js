@@ -16,6 +16,10 @@ var update = function (env, v, val) {
     throw new Error(`Variable ${v} is not defined.`);
 };
 
+var add_binding = function (env, v, val) {
+  env.bindings[v] = val;
+};
+
 function evl (expr, env) {
   // Numbers evaluate to themselves
   if (typeof expr === 'number') {
@@ -97,6 +101,18 @@ function evl (expr, env) {
         return evl(expr[2], env);
       else if (val === '#f')
         return evl(expr[3], env);
+
+    case 'lambda-one':
+      return function (arg) {
+        var newEnv = { bindings: {}, outer: env };
+        newEnv.bindings[expr[1]] = arg;
+        return evl(expr[2], newEnv);
+      };
+
+    default:
+      var func = evl(expr[0], env);
+      var arg = evl(expr[1], env);
+      return func(arg);
   }
 };
 
