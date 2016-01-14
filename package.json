@@ -1,8 +1,9 @@
 {
-  "name": "parser",
+  "name": "schemejs",
   "version": "1.0.0",
   "description": "",
   "main": "test.js",
+  "private": true,
   "directories": {
     "test": "test"
   },
@@ -10,14 +11,22 @@
     "pegjs": "^0.9.0"
   },
   "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-register": "^6.4.3",
     "chai": "^3.4.1",
     "mocha": "^2.3.4"
   },
   "scripts": {
-      "test": "mocha test --ui tdd -c",
-      "watch:test": "mocha test --watch --ui tdd -c --reporter min"
+    "test": "mocha test --ui tdd -c --compilers js:babel-register || true",
+    "watch:test": "mocha test --watch --ui tdd -c --compilers js:babel-register --reporter min"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Allie Jones <allie@alliejon.es>",
+  "license": "ISC",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
 }
