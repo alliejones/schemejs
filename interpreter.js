@@ -1,8 +1,19 @@
 var lookup = function (env, v) {
-  if (env.bindings.hasOwnProperty(v))
+  if (env.bindings && env.bindings.hasOwnProperty(v))
     return env.bindings[v];
-  else
+  else if (env.outer)
     return lookup(env.outer, v);
+  else
+    throw new Error(`Variable ${v} is not defined.`);
+};
+
+var update = function (env, v, val) {
+  if (env.bindings && env.bindings.hasOwnProperty(v))
+    env.bindings[v] = val;
+  else if (env.outer)
+    update(env.outer, v, val);
+  else
+    throw new Error(`Variable ${v} is not defined.`);
 };
 
 function evl (expr, env) {
@@ -52,14 +63,11 @@ function evl (expr, env) {
 
     case 'let-one':
       var newEnv = { bindings: {}, outer: env };
-      bindings[expr[1]] = evl(expr[2], env);
+      newEnv.bindings[expr[1]] = evl(expr[2], env);
       return evl(expr[3], newEnv);
 
     case 'set!':
-      if (!env.hasOwnProperty(expr[1]))
-        throw new Error('Variable '+expr[1]+' is not defined');
-
-      env[expr[1]] = evl(expr[2], env);
+      update(env, expr[1], evl(expr[2], env));
       return 0;
 
     case 'begin':
@@ -69,17 +77,17 @@ function evl (expr, env) {
       return val;
 
     case 'cons':
-      val = evl(expr[1], {});
-      list = evl(expr[2], {});
+      val = evl(expr[1], env);
+      list = evl(expr[2], env);
       return [val].concat(list);
 
     case 'car':
-      list = evl(expr[1], {});
+      list = evl(expr[1], env);
       val = list.shift();
       return val;
 
     case 'cdr':
-      list = evl(expr[1], {});
+      list = evl(expr[1], env);
       list.shift();
       return list;
 

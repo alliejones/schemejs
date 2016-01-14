@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "mocha test --ui tdd -c --compilers js:babel-register || true",
-    "watch:test": "mocha test --watch --ui tdd -c --compilers js:babel-register --reporter min"
+    "watch:test": "mocha test --watch --ui tdd -c --compilers js:babel-register"
   },
   "keywords": [],
   "author": "Allie Jones <allie@alliejon.es>",
@@ -28,5 +28,12 @@
     "presets": [
       "es2015"
     ]
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "env": {
+      "es6": true,
+      "node": true
+    }
   }
 }
