@@ -102,17 +102,23 @@ function evl (expr, env) {
       else if (val === '#f')
         return evl(expr[3], env);
 
-    case 'lambda-one':
-      return function (arg) {
+    case 'lambda':
+      var args = expr.slice(1, -1);
+      return function () {
+        var argVals = [].slice.apply(arguments);
         var newEnv = { bindings: {}, outer: env };
-        newEnv.bindings[expr[1]] = arg;
-        return evl(expr[2], newEnv);
+        for (var i = 0; i < args.length; i++) {
+          newEnv.bindings[args[i]] = argVals[i];
+        }
+
+        return evl(expr[expr.length - 1], newEnv);
       };
 
     default:
       var func = evl(expr[0], env);
-      var arg = evl(expr[1], env);
-      return func(arg);
+      var args = expr.slice(1);
+      args.map(a => evl(a, env));
+      return func.apply(null, args);
   }
 };
 
