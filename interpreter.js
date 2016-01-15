@@ -65,10 +65,14 @@ function evl (expr, env) {
       env[expr[1]] = evl(expr[2], env);
       return 0;
 
-    case 'let-one':
+    case 'let':
       var newEnv = { bindings: {}, outer: env };
-      newEnv.bindings[expr[1]] = evl(expr[2], env);
-      return evl(expr[3], newEnv);
+      var decl = expr[1];
+      for (var i = 0; i < decl.length; i++) {
+        let [ k, v ] = decl[i];
+        newEnv.bindings[k] = evl(v, env);
+      }
+      return evl(expr[2], newEnv);
 
     case 'set!':
       update(env, expr[1], evl(expr[2], env));

@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "mocha test --ui tdd -c --compilers js:babel-register || true",
-    "watch:test": "mocha test --watch --ui tdd -c --compilers js:babel-register"
+    "watch:test": "mocha test --watch --ui tdd -c --compilers js:babel-register --reporter min"
   },
   "keywords": [],
   "author": "Allie Jones <allie@alliejon.es>",

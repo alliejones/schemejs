@@ -7,7 +7,7 @@ suite('lambda', function() {
     assert.equal(evl([['lambda', 'x', 'x'], 5], {}), 5);
   });
 
-  test.only('multiple arguments', function() {
+  test('multiple arguments', function() {
     assert.equal(evl([['lambda', 'x', 'y', 'z', ['*', ['+', 'x', 'y'], 'z']], 5, 2, 2], {}), 14);
   });
 
