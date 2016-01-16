@@ -10,7 +10,10 @@ __ = (EOL / ws / comment)+
 
 atom =
     chars:validchar+
-        { return chars.join(""); }
+        {
+            var str = chars.join("");
+            return isNaN(str) ? str : Number.parseFloat(str);
+        }
 
 quote =
   _ "'" e:expr _

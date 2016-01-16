@@ -43,7 +43,10 @@ module.exports = (function() {
         peg$c4 = { type: "class", value: "[\\n\\r]", description: "[\\n\\r]" },
         peg$c5 = /^[ \t]/,
         peg$c6 = { type: "class", value: "[ \\t]", description: "[ \\t]" },
-        peg$c7 = function(chars) { return chars.join(""); },
+        peg$c7 = function(chars) {
+                    var str = chars.join("");
+                    return isNaN(str) ? str : Number.parseFloat(str);
+                },
         peg$c8 = "'",
         peg$c9 = { type: "literal", value: "'", description: "\"'\"" },
         peg$c10 = function(e) { return [ "quote", e ]; },
