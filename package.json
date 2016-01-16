@@ -18,6 +18,7 @@
     "mocha": "^2.3.4"
   },
   "scripts": {
+    "build:parser": "pegjs src/scheme.peg src/parser.js",
     "test": "mocha test --ui tdd -c --compilers js:babel-register || true",
     "watch:test": "mocha test --watch --ui tdd -c --compilers js:babel-register --reporter min"
   },
