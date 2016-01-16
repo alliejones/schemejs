@@ -1,12 +1,13 @@
 var assert = require('chai').assert;
 
-var evl = require('../interpreter.js');
+var evl = require('../interpreter');
+var initialEnv = require('../initialEnv');
 
 suite('let', function() {
   var env1, env2, env3;
 
   setup(function() {
-    env1 = { bindings: {'x': 19}, outer: { } };
+    env1 = { bindings: {'x': 19}, outer: initialEnv };
     env2 = { bindings: {'y': 16}, outer: env1 };
     env3 = { bindings: {'x': 2}, outer: env2 };
   });

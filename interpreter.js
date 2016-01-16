@@ -1,10 +1,13 @@
+var initialEnv = require('./initialEnv.js')
+
 var lookup = function (env, v) {
   if (env.bindings && env.bindings.hasOwnProperty(v))
     return env.bindings[v];
   else if (env.outer)
     return lookup(env.outer, v);
-  else
+  else {
     throw new Error(`Variable ${v} is not defined.`);
+    }
 };
 
 var update = function (env, v, val) {
@@ -16,11 +19,11 @@ var update = function (env, v, val) {
     throw new Error(`Variable ${v} is not defined.`);
 };
 
-var add_binding = function (env, v, val) {
+var addBinding = function (env, v, val) {
   env.bindings[v] = val;
 };
 
-function evl (expr, env) {
+function evl (expr, env = initialEnv) {
   // Numbers evaluate to themselves
   if (typeof expr === 'number') {
     return expr;
@@ -34,29 +37,6 @@ function evl (expr, env) {
   var op = expr[0];
   var val, val2, list;
   switch (op) {
-    case '+':
-      return evl(expr[1], env) + evl(expr[2], env);
-
-    case '-':
-      return evl(expr[1], env) - evl(expr[2], env);
-
-    case '*':
-      return evl(expr[1], env) * evl(expr[2], env);
-
-    case '/':
-      return evl(expr[1], env) / evl(expr[2], env);
-
-    case '=':
-      val = (evl(expr[1], env) === evl(expr[2], env));
-      return val ? '#t' : '#f';
-
-    case '>':
-      val = (evl(expr[1], env) > evl(expr[2], env));
-      return val ? '#t' : '#f';
-
-    case '<':
-      val = (evl(expr[1], env) < evl(expr[2], env));
-      return val ? '#t' : '#f';
 
     case 'quote':
       return expr[1];
@@ -84,27 +64,13 @@ function evl (expr, env) {
       }
       return val;
 
-    case 'cons':
-      val = evl(expr[1], env);
-      list = evl(expr[2], env);
-      return [val].concat(list);
-
-    case 'car':
-      list = evl(expr[1], env);
-      val = list.shift();
-      return val;
-
-    case 'cdr':
-      list = evl(expr[1], env);
-      list.shift();
-      return list;
-
     case 'if':
       val = evl(expr[1], env);
-      if (expr[1] === '#t')
-        return evl(expr[2], env);
-      else if (val === '#f')
+      // everthing in Scheme is truthy but #f
+      if (val === '#f')
         return evl(expr[3], env);
+      else
+        return evl(expr[2], env);
 
     case 'lambda':
       var args = expr.slice(1, -1);
@@ -121,7 +87,7 @@ function evl (expr, env) {
     default:
       var func = evl(expr[0], env);
       var args = expr.slice(1);
-      args.map(a => evl(a, env));
+      args = args.map(a => evl(a, env));
       return func.apply(null, args);
   }
 };

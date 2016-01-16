@@ -1,9 +1,9 @@
 var assert = require('chai').assert;
 
-var evalScheem = require('../interpreter.js');
+var evl = require('../interpreter.js');
 
 var eq = function(ast, val) {
-  assert.deepEqual(evalScheem(ast, {}), val);
+  assert.deepEqual(evl(ast), val);
 };
 
 suite('equality', function() {
