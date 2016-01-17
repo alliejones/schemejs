@@ -1,6 +1,6 @@
 var assert = require('chai').assert;
 
-var evl = require('../interpreter.js');
+var evl = require('../src/interpreter.js');
 
 var eq = function(ast, val) {
   assert.deepEqual(evl(ast), val);

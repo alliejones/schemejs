@@ -1,7 +1,7 @@
 var assert = require('chai').assert;
 
-var evl = require('../interpreter');
-var initialEnv = require('../initialEnv');
+var evl = require('../src/interpreter.js');
+var initialEnv = require('../src/initialEnv.js');
 
 suite('let', function() {
   var env1, env2, env3;

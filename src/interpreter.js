@@ -28,7 +28,8 @@ var specialForms = {
   },
 
   define: function (env, name, val) {
-    env[name] = evl(val, env);
+    env.bindings[name] = evl(val, env);
+    return 0;
   },
 
   // ES5 indeed allows reserved words as property names
@@ -69,7 +70,7 @@ var specialForms = {
       var argVals = [].slice.apply(arguments);
       var newEnv = { bindings: {}, outer: env };
       for (var i = 0; i < argNames.length; i++) {
-        newEnv.bindings[argNames[i]] = argVals[i];
+        newEnv.bindings[argNames[i]] = evl(argVals[i], env);
       }
       return evl(body, newEnv);
     };
@@ -82,9 +83,8 @@ var lookup = function (env, v) {
     return env.bindings[v];
   else if (env.outer)
     return lookup(env.outer, v);
-  else {
+  else
     throw new Error(`Variable ${v} is not defined.`);
-    }
 };
 
 
@@ -95,11 +95,6 @@ var update = function (env, v, val) {
     update(env.outer, v, val);
   else
     throw new Error(`Value ${v} is not defined.`);
-};
-
-
-var addBinding = function (env, v, val) {
-  env.bindings[v] = val;
 };
 
 module.exports = evl;

@@ -1,7 +1,7 @@
 var assert = require('chai').assert;
 
-var evl = require('../interpreter.js');
-var initialEnv = require('../initialEnv.js');
+var evl = require('../src/interpreter.js');
+var initialEnv = require('../src/initialEnv.js');
 
 var eq = function(ast, val) {
   assert.deepEqual(evl(ast), val);
@@ -34,7 +34,7 @@ suite('variables', function() {
 
   test('define', function() {
     evl(['define', 'x', 2], env);
-    assert.equal(env.x, 2);
+    assert.equal(env.bindings.x, 2);
   });
 
   test('can\'t set! undefined variable', function() {

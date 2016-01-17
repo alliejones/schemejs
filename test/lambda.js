@@ -1,6 +1,7 @@
 var assert = require('chai').assert;
 
-var evl = require('../interpreter.js');
+var evl = require('../src/interpreter.js');
+var parse = require('../src/parser.js').parse;
 
 suite('lambda', function() {
   test('return argument', function() {
@@ -27,5 +28,17 @@ suite('lambda', function() {
                         ['lambda', 'x',
                          ['+', 'x', 'x']]], 5], 3]),
                  6);
+  });
+
+  test('recursion', function() {
+    var p =
+      ['begin',
+       ['define', 'factorial',
+        ['lambda', ['n'],
+         ['if', ['=', 'n', 0],
+          1,
+          ['*', 'n', ['factorial', ['-', 'n', 1]]]]]],
+       ['factorial', 4]];
+    assert.equal(evl(p), 24);
   });
 });
