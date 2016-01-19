@@ -13,11 +13,15 @@ var evl = function evl (expr, env = initialEnv) {
     return specialForms[expr[0]].apply(null, args);
 
   } else {
-    // user-defined function
-    let func = evl(expr[0], env);
-    let args = expr.slice(1);
-    args = args.map(a => evl(a, env));
-    return func.apply(null, args);
+    // user-defined function or variable
+    let val = evl(expr[0], env);
+    if (typeof val === 'function') {
+      let args = expr.slice(1);
+      args = args.map(a => evl(a, env));
+      return val.apply(null, args);
+    } else {
+      return val;
+    }
   }
 };
 
@@ -29,7 +33,7 @@ var specialForms = {
 
   define: function (env, name, val) {
     env.bindings[name] = evl(val, env);
-    return 0;
+    return;
   },
 
   // ES5 indeed allows reserved words as property names
@@ -44,7 +48,7 @@ var specialForms = {
 
   'set!': function (env, name, val) {
     update(env, name, evl(val, env));
-    return 0;
+    return;
   },
 
   begin: function (env, ...exprs) {
